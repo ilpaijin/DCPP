@@ -1,0 +1,41 @@
+version: '2'
+services:
+  source_data:
+    image: busybox
+    volumes:
+      - ./:/var/www/html
+  webserver:
+    build: .docker/webserver
+    links:
+      - php-fpm
+    ports:
+      - "8080:80"
+    volumes_from:
+      - source_data
+  php-fpm:
+    build: .docker/php-fpm
+    expose:
+      - 9000
+    volumes_from:
+      - source_data
+  db:
+    build: .docker/db
+    environment:
+      MYSQL_ROOT_PASSWORD: Bug1bb012
+      MYSQL_DATABASE: my_db
+      MYSQL_USER: paolo
+      MYSQL_PASSWORD: pwd
+    ports:
+      - "3366:3306"
+    restart: always
+#    volumes:
+#      - .docker/db:/docker-entrypoint-initdb.d
+  cli:
+    build: .docker/cli
+    links:
+      - db
+      - webserver
+      - php-fpm
+      - source_data
+    volumes_from:
+      - source_data
