@@ -3,6 +3,6 @@
 
 
 - Download and install [docker](https://www.docker.com/get-docker)
-- Run `docker-compose up`, it will be already available on OSX
+- Run `docker-compose up`
  
  

@@ -6,30 +6,30 @@ services:
       - ./:/var/www/html
   webserver:
     build: .docker/webserver
-    links:
-      - php-fpm
     ports:
       - "8080:80"
     volumes_from:
       - source_data
   php-fpm:
     build: .docker/php-fpm
+    depends_on:
+      - db
     expose:
       - 9000
+    links:
+      - db
     volumes_from:
       - source_data
   db:
     build: .docker/db
     environment:
-      MYSQL_ROOT_PASSWORD: Bug1bb012
-      MYSQL_DATABASE: my_db
-      MYSQL_USER: paolo
-      MYSQL_PASSWORD: pwd
+      MYSQL_ROOT_PASSWORD: dcpp
+      MYSQL_DATABASE: docker_compose_pet_project
+      MYSQL_USER: dcpp
+      MYSQL_PASSWORD: dcpp
     ports:
       - "3366:3306"
     restart: always
-#    volumes:
-#      - .docker/db:/docker-entrypoint-initdb.d
   cli:
     build: .docker/cli
     links:
